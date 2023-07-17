@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
+import TodoButton from './TodoButton.vue'
 
 const emit = defineEmits(["create-todo"])
 
@@ -26,9 +27,11 @@ const createTodo = () => {
 <template>
  <div class="input-wrap" :class="{ 'input-err': todoState.invalid }">
   <input v-model="todoState.todo" type="text" />
-  <button @click="createTodo()">Create</button>
+  <!-- <TodoButton @click="createTodo()">
+   This is a new value
+  </TodoButton> -->
+  <TodoButton @click="createTodo" />
  </div>
-
 
  <p v-show="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p>
  <p>{{ todo }}</p>
@@ -56,12 +59,6 @@ const createTodo = () => {
   &:focus {
    outline: none;
   }
- }
-
- button {
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
  }
 }
 
