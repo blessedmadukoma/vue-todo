@@ -1,11 +1,18 @@
 <script setup>
 import TodoCreator from '@/components/TodoCreator.vue'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { uid } from "uid";
 import TodoItem from '../components/TodoItem.vue';
 import { Icon } from '@iconify/vue';
 
 const todoList = ref([])
+
+// track changes in the todoList and run the code if there is any change
+watch(todoList, () => {
+  setTodoListLocalStorage();
+}, {
+  deep: true, // track changes deep within the todoList
+})
 
 const fetchTodoList = () => {
   const savedTodoList = JSON.parse(localStorage.getItem("todoList"))
@@ -27,7 +34,6 @@ const createTodo = (todo) => {
     isCompleted: null,
     isEditing: null,
   });
-  setTodoListLocalStorage()
 }
 
 const toggleTodoComplete = (index) => {
@@ -40,12 +46,10 @@ const toggleEditTodo = (index) => {
 
 const updateTodo = (todo, index) => {
   todoList.value[index].todo = todo;
-  setTodoListLocalStorage()
 }
 
 const deleteTodo = (index) => {
   todoList.value = todoList.value.filter((todo) => todo.id !== index);
-  setTodoListLocalStorage()
 }
 
 </script>
