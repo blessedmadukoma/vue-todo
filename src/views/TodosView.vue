@@ -1,6 +1,6 @@
 <script setup>
 import TodoCreator from '@/components/TodoCreator.vue'
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { uid } from "uid";
 import TodoItem from '../components/TodoItem.vue';
 import { Icon } from '@iconify/vue';
@@ -12,6 +12,11 @@ watch(todoList, () => {
   setTodoListLocalStorage();
 }, {
   deep: true, // track changes deep within the todoList
+})
+
+// computed property to check if all todos are completed. computed automatically tracks reactive dependencies e.g. todoList.
+const todoCompleted = computed(() => {
+  return todoList.value.every((todo) => todo.isCompleted)
 })
 
 const fetchTodoList = () => {
@@ -68,6 +73,11 @@ const deleteTodo = (index) => {
     <p class="todos-msg" v-else>
       <Icon icon="noto-v1:sad-but-relieved-face" color="#41b080" width="22" />
       <span>You have no todos to complete! Add one!</span>
+    </p>
+
+    <p v-if="todoCompleted && todoList.length > 0" class="todos-msg">
+      <Icon icon="noto-v1:party-popper" />
+      <span>You have completed all todos!</span>
     </p>
   </main>
 </template>
