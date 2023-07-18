@@ -20,6 +20,15 @@ const toggleTodoComplete = (index) => {
   todoList.value[index].isCompleted = !todoList.value[index].isCompleted;
 }
 
+const toggleEditTodo = (index) => {
+  todoList.value[index].isEditing = !todoList.value[index].isEditing;
+}
+
+const updateTodo = (todo, index) => {
+  todoList.value[index].todo = todo;
+  // todoList.value[index].isEditing = false;
+}
+
 </script>
 
 <template>
@@ -29,7 +38,8 @@ const toggleTodoComplete = (index) => {
 
     <ul class="todo-list" v-if="todoList.length > 0">
       <!-- :todo="todo" means props (i.e. passing value, todo, from parent, TodosView, to child, TodoItem). -->
-      <TodoItem v-for="(todo, index) in todoList" :todo="todo" :index="index" @toggle-complete="toggleTodoComplete" />
+      <TodoItem v-for="(todo, index) in todoList" :todo="todo" :index="index" @toggle-complete="toggleTodoComplete"
+        @edit-todo="toggleEditTodo" @update-todo="updateTodo" />
     </ul>
 
     <p class="todos-msg" v-else>

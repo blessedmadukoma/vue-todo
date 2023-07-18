@@ -17,7 +17,7 @@ const props = defineProps({
  }
 });
 
-defineEmits(["toggle-complete"])
+defineEmits(["toggle-complete", "edit-todo", "update-todo"])
 
 </script> 
 
@@ -26,13 +26,15 @@ defineEmits(["toggle-complete"])
   <input type="checkbox" :checked="todo.isCompleted" @input="$emit('toggle-complete', index)" />
   <div class="todo">
    <!-- note: when handling data for a prop, it's best to handle in the parent component i.e. TodosView in this case -->
-   <input type="text" v-if="todo.isEditing" :value="todo.todo" />
+   <input type="text" v-if="todo.isEditing" :value="todo.todo"
+    @input="$emit('update-todo', $event.target.value, index)" />
    <span v-else :class="{ 'completed-todo': todo.isCompleted }">{{ todo.todo }}</span>
   </div>
 
   <div class="todo-actions">
-   <Icon icon="ph:check-circle" class="icon" color="#41b080" width="22" v-if="todo.isEditing" />
-   <Icon icon="ph:pencil-fill" class="icon" color="#41b080" width="22" v-else />
+   <Icon icon="ph:check-circle" class="icon" color="#41b080" width="22" v-if="todo.isEditing"
+    @click="$emit('edit-todo', index)" />
+   <Icon icon="ph:pencil-fill" class="icon" color="#41b080" width="22" v-else @click="$emit('edit-todo', index)" />
    <Icon icon="ph:trash" class="icon" color="#f95e5e" width="22" />
   </div>
  </li>
