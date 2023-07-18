@@ -86,11 +86,11 @@ const dragOptions = () => {
     <ul class="todo-list" v-if="todoList.length > 0">
       <draggable v-model="todoList" class="todo-list" v-bind="dragOptions" :move="onMove" @start="isDragging = true"
         @end="isDragging = false" item-key="id">
-        <template #item="{ element }">
+        <template #item="{ element, index }">
           <div>
             <!-- :todo="todo" means props (i.e. passing value, todo, from parent, TodosView, to child, TodoItem). -->
-            <TodoItem :todo="element" :index="element.id" @toggle-complete="toggleTodoComplete"
-              @edit-todo="toggleEditTodo" @update-todo="updateTodo" @delete-todo="deleteTodo" />
+            <TodoItem :todo="element" :index="index" @toggle-complete="toggleTodoComplete" @edit-todo="toggleEditTodo"
+              @update-todo="updateTodo" @delete-todo="deleteTodo" />
           </div>
         </template>
       </draggable>

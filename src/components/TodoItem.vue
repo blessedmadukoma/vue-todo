@@ -12,7 +12,7 @@ const props = defineProps({
   // }
  },
  index: {
-  type: String,
+  type: Number,
   required: true,
  }
 });
