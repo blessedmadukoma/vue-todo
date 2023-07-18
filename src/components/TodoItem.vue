@@ -10,18 +10,24 @@ const props = defineProps({
   // for Object, use default() {
   //  return {}
   // }
+ },
+ index: {
+  type: Number,
+  required: true,
  }
-})
+});
+
+defineEmits(["toggle-complete"])
 
 </script> 
 
 <template>
  <li>
-  <input type="checkbox" :checked="todo.isCompleted" />
+  <input type="checkbox" :checked="todo.isCompleted" @input="$emit('toggle-complete', index)" />
   <div class="todo">
    <!-- note: when handling data for a prop, it's best to handle in the parent component i.e. TodosView in this case -->
    <input type="text" v-if="todo.isEditing" :value="todo.todo" />
-   <span v-else>{{ todo.todo }}</span>
+   <span v-else :class="{ 'completed-todo': todo.isCompleted }">{{ todo.todo }}</span>
   </div>
 
   <div class="todo-actions">
@@ -65,6 +71,10 @@ li {
 
  .todo {
   flex: 1;
+
+  .completed-todo {
+   text-decoration: line-through;
+  }
 
   input[type="text"] {
    width: 100%;
