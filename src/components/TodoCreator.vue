@@ -34,7 +34,7 @@ const createTodo = () => {
  </div>
 
  <p v-show="todoState.invalid" class="err-msg">{{ todoState.errMsg }}</p>
- <p>{{ todo }}</p>
+ <!-- <p>{{ todoState.todo }}</p> -->
 </template>
 
 <style lang="scss" scoped>

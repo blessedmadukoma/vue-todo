@@ -4,6 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { uid } from "uid";
 import TodoItem from '../components/TodoItem.vue';
 import { Icon } from '@iconify/vue';
+import draggable from 'vuedraggable';
 
 const todoList = ref([])
 
@@ -57,6 +58,24 @@ const deleteTodo = (index) => {
   todoList.value = todoList.value.filter((todo) => todo.id !== index);
 }
 
+// Drag and drop
+const onMove = ({ relatedContext, draggedContext }) => {
+  const relatedElement = relatedContext.element;
+  const draggedElement = draggedContext.element;
+  return (
+    (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+  );
+}
+
+const dragOptions = () => {
+  return {
+    animation: 0,
+    group: "description",
+    disabled: !this.editable,
+    ghostClass: "ghost"
+  };
+}
+
 </script>
 
 <template>
@@ -65,9 +84,16 @@ const deleteTodo = (index) => {
     <TodoCreator @create-todo="createTodo" />
 
     <ul class="todo-list" v-if="todoList.length > 0">
-      <!-- :todo="todo" means props (i.e. passing value, todo, from parent, TodosView, to child, TodoItem). -->
-      <TodoItem v-for="(todo, index) in todoList" :todo="todo" :index="index" @toggle-complete="toggleTodoComplete"
-        @edit-todo="toggleEditTodo" @update-todo="updateTodo" @delete-todo="deleteTodo" />
+      <draggable v-model="todoList" class="todo-list" v-bind="dragOptions" :move="onMove" @start="isDragging = true"
+        @end="isDragging = false" item-key="id">
+        <template #item="{ element }">
+          <div>
+            <!-- :todo="todo" means props (i.e. passing value, todo, from parent, TodosView, to child, TodoItem). -->
+            <TodoItem :todo="element" :index="element.id" @toggle-complete="toggleTodoComplete"
+              @edit-todo="toggleEditTodo" @update-todo="updateTodo" @delete-todo="deleteTodo" />
+          </div>
+        </template>
+      </draggable>
     </ul>
 
     <p class="todos-msg" v-else>
