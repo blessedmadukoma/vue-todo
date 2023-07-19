@@ -1,4 +1,25 @@
 <script setup>
+import { ref, watch } from 'vue';
+import { Icon } from '@iconify/vue';
+
+let internetStatus = ref("");
+let internetStatusColor = ref("");
+
+const checkInternetStatus = () => {
+ watch(() => navigator.onLine, () => {
+  const status = navigator.onLine ? "Online" : "Offline";
+  const color = navigator.onLine ? "#41b080" : "#f95e5e";
+  internetStatus.value = status;
+  internetStatusColor.value = color;
+ }, {
+  deep: true,
+  immediate: true,
+ });
+
+ requestAnimationFrame(checkInternetStatus)
+}
+
+requestAnimationFrame(checkInternetStatus);
 
 </script>
 
@@ -10,10 +31,17 @@
     <h1>Vue Todos</h1>
    </div>
 
-   <ul class="nav-routes">
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-   </ul>
+   <div class="internet-status">
+    <Icon icon="ph:wifi-high" class="icon" :color="internetStatusColor" width="22" />
+    <span :internetStatus="internetStatus" :style="{ color: internetStatusColor }">{{ internetStatus }}</span>
+   </div>
+
+   <div>
+    <ul class="nav-routes">
+     <RouterLink to="/">Home</RouterLink>
+     <RouterLink to="/about">About</RouterLink>
+    </ul>
+   </div>
   </nav>
  </header>
 </template>
@@ -26,6 +54,7 @@ header {
   display: flex;
   align-items: center;
   padding: 25px 16px;
+  justify-content: space-between;
 
   .branding {
    display: flex;
@@ -38,6 +67,19 @@ header {
 
    h1 {
     font-size: 24px;
+   }
+  }
+
+  .internet-status {
+   display: flex;
+   align-items: center;
+   padding: 6px;
+   border: 0.5px solid #9d9d9d;
+   color: #9d9d9d;
+   border-radius: 10px;
+
+   span {
+    font-size: 14px;
    }
   }
 
